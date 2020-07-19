@@ -32,9 +32,9 @@ static void		strcpy_test(char *s) {
 
 static void		strcmp_test(char *s1, char *s2) {
 	int ret1 = ft_strcmp(s1, s2); int ret2 = strcmp(s1, s2);
-	printf("s1 = |%s|, ret1 = %d, s2 = |%s|, ret2 = %d\n");
+	printf("s1 = |%s|, ret1 = %d, s2 = |%s|, ret2 = %d\n", s1, ret1, s2, ret2);
 	if ((ret1 < 0 && ret2 < 0) || (!ret1 && !ret2 ) || (ret1 > 0 && ret2 > 0))
-		printf(GREEN"SUCCESS"RESET);
+		printf(GREEN"SUCCESS\n"RESET);
 	else
 		printf(RED"ERROR\n"RESET);
 }

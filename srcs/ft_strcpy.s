@@ -9,9 +9,9 @@ ft_strcpy:
 
 ft_strcpy_loop:
 	mov	rdx, [rsi + rcx]
+	mov	[rdi + rcx], rdx	
 	cmp	rdx, 0
 	je	strcpy_ret
-	mov	[rdi + rcx], rdx	
 	inc	rcx
 	jmp	ft_strcpy_loop
 

@@ -17,13 +17,13 @@ static void		strlen_test(char *s) {
 	if (yours != std)
 		printf(RED"ERROR\n"RESET);
 	else
-		printF(GREEN"SUCCESS\n"RESET);
+		printf(GREEN"SUCCESS\n"RESET);
 }
 
 static void		strcpy_test(char *s) {
-	char buf1[1024]; char buf2[1024];
+	char buf1[1024] = {0}; char buf2[1024] = {0};
 	char *ret1 = ft_strcpy(buf1, s); char *ret2 = ft_strcpy(buf2, s);
-	printf("buf1 = |%s| buf2 = |%s|\n");
+	printf("buf1 = |%s| buf2 = |%s|\n", buf1, buf2);
 	if (strcmp(buf1, buf2) != 0)
 		printf(RED"ERROR\n"RESET);
 	else
@@ -34,8 +34,10 @@ int main()
 {
 	printf(CYAN"------------Testing strlen-----------\n"RESET);
 	strlen_test("");
-	strlen_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.);
+	strlen_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore\
+ et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
 	printf(CYAN"------------Testing strcpy-----------\n"RESET);
 	strcpy_test("");
+	strcpy_test("a");
 	strcpy_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit");
 }

@@ -30,6 +30,15 @@ static void		strcpy_test(char *s) {
 		printf(GREEN"SUCCESS\n"RESET);
 }
 
+static void		strcmp_test(char *s1, char *s2) {
+	int ret1 = ft_strcmp(s1, s2); int ret2 = strcmp(s1, s2);
+	printf("s1 = |%s|, ret1 = %d, s2 = |%s|, ret2 = %d\n");
+	if ((ret1 < 0 && ret2 < 0) || (!ret1 && !ret2 ) || (ret1 > 0 && ret2 > 0))
+		printf(GREEN"SUCCESS"RESET);
+	else
+		printf(RED"ERROR\n"RESET);
+}
+
 int main()
 {
 	printf(CYAN"------------Testing strlen-----------\n"RESET);
@@ -40,4 +49,11 @@ int main()
 	strcpy_test("");
 	strcpy_test("a");
 	strcpy_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+
+	printf(CYAN"------------Testing strcmp-----------\n"RESET);
+	strcmp_test("", "");
+	strcmp_test("", "hello_world");
+	strcmp_test("wonderful world", "");
+	strcmp_test("bonjour", "au revoir");
+	strcmp_test("ces strings sont identiques", "ces strings sont identiques");
 }

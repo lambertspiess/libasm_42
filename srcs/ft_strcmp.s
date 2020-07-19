@@ -7,32 +7,18 @@ ft_strcmp:
 	xor	rcx, rcx		; iterator = 0
 
 strcmp_loop:
-	cmp	byte [rdi + rcx], 0
-	je	end_of_string
-	cmp	byte [rsi + rcx], 0
-	je	return_pos
-	mov	rdx, [rsi + rcx]
-	cmp	[rdi + rcx], rdx
-	jl	return_neg
-	jg	return_pos
+	xor	rax, rax
+	mov	r8b, byte[rdi + rcx]
+	mov	r9b, byte[rsi + rcx]
+	mov	al, r8b
+	sub	rax, r9
+	cmp	r8b, 0
+	je	strcmp_return
+	cmp	r9b, 0
+	je	strcmp_return
 	inc	rcx
-	jmp	strcmp_loop
+	cmp	r8b, r9b
+	je	strcmp_loop
 
-end_of_string:
-	cmp	byte [rsi + rcx], 0
-	je	return_zero
-	jmp	return_neg
-	
-return_zero:
-	xor	rax,rax
-	ret
-
-return_neg:
-	xor	rax,rax
-	dec	rax
-	ret
-
-return_pos:
-	xor	rax,rax
-	inc	rax
+strcmp_return:
 	ret

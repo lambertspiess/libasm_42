@@ -8,9 +8,9 @@ ft_strcpy:
 	xor	rcx, rcx
 
 ft_strcpy_loop:
-	mov	rdx, [rsi + rcx]
-	mov	[rdi + rcx], rdx	
-	cmp	rdx, 0
+	mov	dl, byte[rsi + rcx]
+	mov	byte[rdi + rcx], dl	
+	cmp	dl, 0
 	je	strcpy_ret
 	inc	rcx
 	jmp	ft_strcpy_loop

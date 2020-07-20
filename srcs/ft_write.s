@@ -11,19 +11,18 @@ section .text
 
 ft_write:
 	xor	rax, rax
-	inc	rax			; rax set to 1 for syscall write
+	inc	rax
 	syscall
 	cmp	rax, 0
 	jl	error		; if rax < 0, handle error
 	ret
 
 error:
-	push	rdi
-	mov	rdi, rax
-	call	__errno_location wrt ..plt	; wrt or else it segfaults
-	xor	rax, rax
-	dec	rax			; rax = -1
-	pop	rdi
+	neg	rax			; set errcode to positive
+	mov	rdi, rax		; store errcode in %rdi
+	call	__errno_location wrt ..plt	; get errno location
+	mov	[rax], rdi		; initialize errno with errcode
+	mov	rax, -1			; return -1
 	ret
 ;	elf does not support segment-base references, the wrt (with reference to) is hence used
 ;	to do position-independent-code (PIC) relocation.

@@ -35,10 +35,11 @@ $(OBJS): $(OBJSDIR)/%.o: %.s
 all: $(NAME)
 
 clean :
+	@fm testfile_write*
 	@rm -r $(OBJSDIR) || true
 
 fclean :
-	@make clean
+	@make clean || true
 	@rm $(NAME) || true
 	@rm testfile1 || true
 	@rm testfile2 || true

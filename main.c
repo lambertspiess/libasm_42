@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/uio.h>
 
 #define RED "\x1b[31m"
 #define GREEN "\x1b[32m"
@@ -39,16 +41,49 @@ static void		strcmp_test(char *s1, char *s2) {
 		printf(RED"ERROR\n"RESET);
 }
 
+static void		write_test(int fd, char *s) {
+	char	buf1[4096] = {0}; char buf2[4096] = {0}; int ret1, ret2;
+	printf("testing fd = %d, s = |%s|\n", fd, s);
+	if (fd > 2) {
+		int fd1 = open("testfile_write_1", O_CREAT | O_TRUNC | O_RDWR, 0777);
+		int fd2 = open("testfile_write_2", O_CREAT | O_TRUNC | O_RDWR, 0777);
+		ret1 = ft_write(fd1, s, strlen(s));
+		read(fd1, buf1, strlen(s) + 1);
+		ret2 = write(fd2, s, strlen(s));
+		read(fd2, buf2, strlen(s) + 1);
+	} else if (fd < 0) {
+		ret1 = ft_write(fd, s, strlen(s) + 1);
+		printf("errno = %d, strerror = |%s|\n", errno, strerror(errno));
+		ret2 = write(fd, s, strlen(s) + 1);
+		printf("errno = %d, strerror = |%s|\n", errno, strerror(errno));
+	} else {
+		ret1 = ft_write(fd, s, strlen(s) + 1);
+		ret2 = write(fd, s, strlen(s) + 1);
+	}
+	printf("ret1 = %d, wrote |%s|, ret2 = %d, wrote |%s|\n",
+		ret1, buf1, ret2, buf2);
+
+	if (ret1 == ret2) {
+		printf(GREEN"ret value OK, "RESET);
+		if (strcmp(buf1, buf2) == 0) {
+			printf(GREEN"contents OK, SUCCESS\n"RESET);
+		} else {
+			printf(RED"contents not the same, ERROR\n"RESET);
+		}
+	} else { printf(RED"Ret values not OK, ERROR\n"RESET); }
+}
+
 int main()
 {
 	printf(CYAN"------------Testing strlen-----------\n"RESET);
 	strlen_test("");
 	strlen_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore\
  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+
 	printf(CYAN"------------Testing strcpy-----------\n"RESET);
 	strcpy_test("");
-	strcpy_test("a");
 	strcpy_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit");
+	strcpy_test("a");
 
 	printf(CYAN"------------Testing strcmp-----------\n"RESET);
 	strcmp_test("", "");
@@ -56,4 +91,9 @@ int main()
 	strcmp_test("wonderful world", "");
 	strcmp_test("bonjour", "au revoir");
 	strcmp_test("ces strings sont identiques", "ces strings sont identiques");
+
+	printf(CYAN"------------Testing write-----------\n"RESET);
+	write_test(fileno(stdout), "this goes to stdout");
+	write_test(-1, "this goes to badfd");
+	write_test(42, "this goes to open file fd");
 }

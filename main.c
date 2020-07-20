@@ -73,6 +73,75 @@ static void		write_test(int fd, char *s) {
 	} else { printf(RED"Ret values not OK, ERROR\n"RESET); }
 }
 
+static void		read_test_openfd(char *s) {
+	char buf1[4096] = {0}; char buf2[4096] = {0};
+	int fd = open("testfile_read", O_CREAT | O_RDWR | O_TRUNC, 0777);
+	write(fd, s, strlen(s));
+	printf("testing read on fd = %d, contents = |%s|\n", fd, s);
+	int ret1, ret2;
+	ret1 = ft_read(fd, buf1, 1000);
+	fseek(fd, 0, SEEK_SET);
+	ret2 = read(fd, buf2, 1000);
+	printf("ret1 = %d, buf1 = |%s|, ret2 = %d, buf2 = |%s|\n", ret1, buf1, ret2, buf2);
+	if (ret1 == ret2) {
+		if (!(strcmp(buf1, buf2))) {
+			printf(GREEN"SUCCESS\n"RESET);
+		} else {
+			printf(RED"buf1 != buf2, ERROR\n"RESET);
+		}
+	} else {
+		printf(RED"ret1 != ret2, ERROR\n"RESET);
+	}
+}
+
+static void		read_test_badfd(void) {
+	char buf1[4096] = {0}; char buf2[4096] = {0};
+	int ret1, ret2;
+	printf("testing read on badfd\n");
+	ret1 = ft_read(-1, buf1, 42);
+	printf("ret1 = %d, buf1 = |%s|, errno = %d, strerror = |%s|\n",
+			ret1, buf1, errno, strerror(errno));
+	ret2 = read(-1, buf2, 42);
+	printf("ret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
+			ret2, buf2, errno, strerror(errno));
+	if (ret1 == ret2) {
+		if (!(strcmp(buf1, buf2))) {
+			printf(GREEN"SUCCESS\n"RESET);
+		} else {
+			printf(RED"buf1 != buf2, ERROR\n"RESET);
+		}
+	} else {
+		printf(RED"ret1 != ret2, ERROR\n"RESET);
+	}
+}
+
+static void		read_test_stdin(char *s) {
+
+	char buf1[4096] = {0}; char buf2[4096] = {0};
+	printf("testing read on stdin, contents = |%s|" s);
+	int ret1, ret2;
+
+	write(1, s, strlen(s));
+	ret1 = ft_read(1, buf1, 1000);
+	printf("ret1 = %d, buf1 = |%s|, errno = %d, strerror = |%s|\n",
+			ret1, buf1, errno, strerror(errno));
+
+	write(1, s, strlen(s));
+	ret2 = read(1, buf2, 1000);
+	printf("ret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
+			ret2, buf2, errno, strerror(errno));
+
+	if (ret1 == ret2) {
+		if (!(strcmp(buf1, buf2))) {
+			printf(GREEN"SUCCESS\n"RESET);
+		} else {
+			printf(RED"buf1 != buf2, ERROR\n"RESET);
+		}
+	} else {
+		printf(RED"ret1 != ret2, ERROR\n"RESET);
+	}
+}
+
 int main()
 {
 	printf(CYAN"------------Testing strlen-----------\n"RESET);
@@ -96,4 +165,8 @@ int main()
 	write_test(fileno(stdout), "this goes to stdout");
 	write_test(-1, "this goes to badfd");
 	write_test(42, "this goes to open file fd");
+
+	printf(CYAN"------------Testing read-----------\n"RESET);
+	read_test_openfd("This goes to a fd");
+	read_test_badfd(void);
 }

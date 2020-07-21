@@ -79,10 +79,12 @@ static void		read_test_openfd(char *s) {
 	write(fd, s, strlen(s));
 	printf("testing read on fd = %d, contents = |%s|\n", fd, s);
 	int ret1, ret2;
-	ret1 = ft_read(fd, buf1, 1000);
-	fseek(fd, 0, SEEK_SET);
-	ret2 = read(fd, buf2, 1000);
-	printf("ret1 = %d, buf1 = |%s|, ret2 = %d, buf2 = |%s|\n", ret1, buf1, ret2, buf2);
+	lseek(fd, 0, SEEK_SET);
+	errno = 0; ret2 = read(fd, buf2, 1000);
+	printf("ret2 = %d, bufd = |%s|, errno %d |%s|\n", ret2, buf2, errno, strerror(errno));
+	lseek(fd, 0, SEEK_SET);
+	errno = 0; ret1 = ft_read(fd, buf1, 1000);
+	printf("ret1 = %d, buf1 = |%s|, errno %d |%s|\n", ret1, buf1, errno, strerror(errno));
 	if (ret1 == ret2) {
 		if (!(strcmp(buf1, buf2))) {
 			printf(GREEN"SUCCESS\n"RESET);
@@ -98,10 +100,10 @@ static void		read_test_badfd(void) {
 	char buf1[4096] = {0}; char buf2[4096] = {0};
 	int ret1, ret2;
 	printf("testing read on badfd\n");
-	ret1 = ft_read(-1, buf1, 42);
+	errno = 0; ret1 = ft_read(-1, buf1, 42);
 	printf("ret1 = %d, buf1 = |%s|, errno = %d, strerror = |%s|\n",
 			ret1, buf1, errno, strerror(errno));
-	ret2 = read(-1, buf2, 42);
+	errno = 0; ret2 = read(-1, buf2, 42);
 	printf("ret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
 			ret2, buf2, errno, strerror(errno));
 	if (ret1 == ret2) {
@@ -115,20 +117,20 @@ static void		read_test_badfd(void) {
 	}
 }
 
-static void		read_test_stdin(char *s) {
+static void		read_test_stdin(void) {
 
 	char buf1[4096] = {0}; char buf2[4096] = {0};
-	printf("testing read on stdin, contents = |%s|" s);
+	printf("testing read on stdin, please type something :\n");
 	int ret1, ret2;
 
-	write(1, s, strlen(s));
+	errno = 0;
 	ret1 = ft_read(1, buf1, 1000);
-	printf("ret1 = %d, buf1 = |%s|, errno = %d, strerror = |%s|\n",
+	printf("\nret1 = %d, buf1 = |%s|, errno = %d, strerror = |%s|\n",
 			ret1, buf1, errno, strerror(errno));
 
-	write(1, s, strlen(s));
+	errno = 0;
 	ret2 = read(1, buf2, 1000);
-	printf("ret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
+	printf("\nret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
 			ret2, buf2, errno, strerror(errno));
 
 	if (ret1 == ret2) {
@@ -168,5 +170,6 @@ int main()
 
 	printf(CYAN"------------Testing read-----------\n"RESET);
 	read_test_openfd("This goes to a fd");
-	read_test_badfd(void);
+	read_test_badfd();
+	read_test_stdin();
 }

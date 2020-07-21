@@ -34,7 +34,8 @@ static void		strcpy_test(char *s) {
 
 static void		strcmp_test(char *s1, char *s2) {
 	int ret1 = ft_strcmp(s1, s2); int ret2 = strcmp(s1, s2);
-	printf("s1 = |%s|, ret1 = %d, s2 = |%s|, ret2 = %d\n", s1, ret1, s2, ret2);
+	printf("comparing |%s| and |%s|\n", s1, s2);
+	printf("ret1 = %d, ret2 = %d\n", ret1, ret2);
 	if ((ret1 < 0 && ret2 < 0) || (!ret1 && !ret2 ) || (ret1 > 0 && ret2 > 0))
 		printf(GREEN"SUCCESS\n"RESET);
 	else
@@ -52,8 +53,10 @@ static void		write_test(int fd, char *s) {
 		ret2 = write(fd2, s, strlen(s));
 		read(fd2, buf2, strlen(s) + 1);
 	} else if (fd < 0) {
+		errno = 0;
 		ret1 = ft_write(fd, s, strlen(s) + 1);
 		printf("errno = %d, strerror = |%s|\n", errno, strerror(errno));
+		errno = 0;
 		ret2 = write(fd, s, strlen(s) + 1);
 		printf("errno = %d, strerror = |%s|\n", errno, strerror(errno));
 	} else {

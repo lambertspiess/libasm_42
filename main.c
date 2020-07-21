@@ -120,7 +120,7 @@ static void		read_test_badfd(void) {
 static void		read_test_stdin(void) {
 
 	char buf1[4096] = {0}; char buf2[4096] = {0};
-	printf("testing read on stdin, please type something :\n");
+	printf("testing ft_read on stdin, please type something :\n");
 	int ret1, ret2;
 
 	errno = 0;
@@ -129,6 +129,7 @@ static void		read_test_stdin(void) {
 			ret1, buf1, errno, strerror(errno));
 
 	errno = 0;
+	printf("To compare with glibc read on stdin, please type it again :\n");
 	ret2 = read(1, buf2, 1000);
 	printf("\nret2 = %d, buf2 = |%s|, errno = %d, strerror = |%s|\n",
 			ret2, buf2, errno, strerror(errno));
@@ -142,6 +143,20 @@ static void		read_test_stdin(void) {
 	} else {
 		printf(RED"ret1 != ret2, ERROR\n"RESET);
 	}
+}
+
+static void		strdup_test(char *s) {
+	char *s1, *s2;
+	errno = 0;
+	s1 = ft_strdup(s);
+	printf("s1 = |%s|, errno = %d |%s|\n", s1, errno, strerror(errno));
+	errno = 0;
+	s2 = ft_strdup(s);
+	printf("s2 = |%s|, errno = %d |%s|\n", s2, errno, strerror(errno));
+	if (!strcmp(s1, s2))
+		printf(GREEN"SUCCESS\n"RESET);
+	else
+		printf(RED"ERROR\n"RESET);
 }
 
 int main()
@@ -172,4 +187,7 @@ int main()
 	read_test_openfd("This goes to a fd");
 	read_test_badfd();
 	read_test_stdin();
-}
+
+	printf(CYAN"------------Testing strdup-----------\n"RESET);
+	strdup_test("");
+	strdup_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");

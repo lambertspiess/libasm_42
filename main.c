@@ -159,6 +159,21 @@ static void		strdup_test(char *s) {
 		printf(RED"ERROR\n"RESET);
 }
 
+static void		strdup_heap_test(char *sstack) {
+	char *s1, *s2;
+	char *s = strdup(sstack);
+	errno = 0;
+	s1 = ft_strdup(s);
+	printf("s1 = |%s|, errno = %d |%s|\n", s1, errno, strerror(errno));
+	errno = 0;
+	s2 = ft_strdup(s);
+	printf("s2 = |%s|, errno = %d |%s|\n", s2, errno, strerror(errno));
+	if (!strcmp(s1, s2))
+		printf(GREEN"SUCCESS\n"RESET);
+	else
+		printf(RED"ERROR\n"RESET);
+}
+
 int main()
 {
 	printf(CYAN"------------Testing strlen-----------\n"RESET);
@@ -188,6 +203,10 @@ int main()
 	read_test_badfd();
 	read_test_stdin();
 
-	printf(CYAN"------------Testing strdup-----------\n"RESET);
+	printf(CYAN"------------Testing strdup, source on stack-----------\n"RESET);
 	strdup_test("");
+	strdup_test("hello");
 	strdup_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+	printf(CYAN"------------Testing strdup, source on heap-----------\n"RESET);
+	strdup_heap_test("hello");
+}

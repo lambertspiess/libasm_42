@@ -41,8 +41,7 @@ clean :
 fclean :
 	@make clean || true
 	@rm $(NAME) || true
-	@rm testfile1 || true
-	@rm testfile2 || true
+	@rm testfile* || true
 	@rm a.out || true
 
 re :

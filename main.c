@@ -230,4 +230,6 @@ int main()
 	strdup_test("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
 	printf(CYAN"------------Testing strdup, source on heap-----------\n"RESET);
 	strdup_heap_test("hello");
+	strdup_heap_test("");
+	strdup_heap_test("a");
 }

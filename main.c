@@ -33,10 +33,27 @@ static void		strcpy_test(char *s) {
 }
 
 static void		strcmp_test(char *s1, char *s2) {
-	int ret1 = ft_strcmp(s1, s2); int ret2 = strcmp(s1, s2);
+	int ret2 = strcmp(s1, s2); int ret1 = ft_strcmp(s1, s2); 
 	printf("comparing |%s| and |%s|\n", s1, s2);
 	printf("ret1 = %d, ret2 = %d\n", ret1, ret2);
 	if ((ret1 < 0 && ret2 < 0) || (!ret1 && !ret2 ) || (ret1 > 0 && ret2 > 0))
+		printf(GREEN"SUCCESS\n"RESET);
+	else
+		printf(RED"ERROR\n"RESET);
+}
+
+static void	strcmp_test_back_to_back(char *s1, char *s2, char *s3, char *s4) {
+	int ret2 = strcmp(s1, s2); int ret1 = ft_strcmp(s1, s2); 
+	printf("comparing |%s| and |%s|\n", s1, s2);
+	printf("ret1 = %d, ret2 = %d\n", ret1, ret2);
+	if ((ret1 < 0 && ret2 < 0) || (!ret1 && !ret2 ) || (ret1 > 0 && ret2 > 0))
+		printf(GREEN"SUCCESS\n"RESET);
+	else
+		printf(RED"ERROR\n"RESET);
+	int ret3 = ft_strcmp(s3, s4); int ret4 = strcmp(s3, s4); 
+	printf("comparing |%s| and |%s|\n", s3, s4);
+	printf("ret3 = %d, ret4 = %d\n", ret3, ret4);
+	if ((ret3 < 0 && ret4 < 0) || (!ret3 && !ret4 ) || (ret3 > 0 && ret4 > 0))
 		printf(GREEN"SUCCESS\n"RESET);
 	else
 		printf(RED"ERROR\n"RESET);
@@ -195,6 +212,7 @@ int main()
 	strcmp_test("wonderful world", "");
 	strcmp_test("bonjour", "au revoir");
 	strcmp_test("ces strings sont identiques", "ces strings sont identiques");
+	strcmp_test_back_to_back("abcd", "abcd", "bonjour", "au revoir");
 
 	printf(CYAN"------------Testing write-----------\n"RESET);
 	write_test(fileno(stdout), "this goes to stdout");

@@ -4,21 +4,31 @@
 
 section .text
 	extern	malloc
+	extern	__errno_location
 	extern	ft_strlen
 	extern	ft_strcpy
 	global	ft_strdup
 
 ft_strdup:
-	mov	r8, rdi		; save source string address before calling strlen
+	push	rdi
 	call	ft_strlen	; %rax = strlen(%rdi)
-	inc	rax		; +1 for '\0'
-	mov	rdi, rax	; put size in %rdi for malloc
+	inc	rax		; len += 1 for '\0'
+	mov	rdi, rax	; %rdi = len for malloc
 	call	malloc wrt ..plt
 	cmp	rax, 0		; check errors
-	je	strdup_return
-	mov	rdi, rax	; mov destination ptr in %rsi for strcpy
-	mov	rsi, r8		; mov source pointer in %rdi for strcpy
+	je	error
+	pop	rdi
+	mov	rsi, rdi
+	mov	rdi, rax	; mov dst in %rdi for strcpy
 	call	ft_strcpy
 
 strdup_return:
+	ret
+
+error:
+	neg	rax
+	mov	rdi, rax
+	call	__errno_location wrt ..plt
+	mov	[rax], rdi
+	mov	rax, 0
 	ret
